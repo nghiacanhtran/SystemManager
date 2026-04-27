@@ -20,14 +20,14 @@ Mục tiêu:
 
 ---
 
-00_INBOX           → Nơi tiếp nhận file
-01_ACTIVE_PROJECTS → Dự án đang thực thi
-02_DEVELOPMENT     → Tài nguyên dev dùng chung
-03_RESOURCES       → Tài liệu & tri thức
-04_PERSONAL        → Quản lý cá nhân
-05_ARCHIVE         → Lưu trữ dài hạn
-06_BACKUP_SYNC     → Backup & đồng bộ
-07_UTILITIES       → Công cụ hệ thống
+00_INBOX           → Nơi tiếp nhận file  
+01_ACTIVE_PROJECTS → Dự án đang thực thi  
+02_DEVELOPMENT     → Tài nguyên dev dùng chung  
+03_RESOURCES       → Tài liệu & tri thức  
+04_PERSONAL        → Quản lý cá nhân  
+05_ARCHIVE         → Lưu trữ dài hạn  
+06_BACKUP_SYNC     → Backup & đồng bộ  
+07_UTILITIES       → Công cụ hệ thống  
 
 1. CHI TIẾT TỪNG FOLDER
 
