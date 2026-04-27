@@ -1,307 +1,249 @@
-# WORKSPACE STRUCTURE – README
+# WORKSPACE STRUCTURE – README (VERSION 2 - NORMALIZED)
 
 1. OVERVIEW
 
 ---
 
-Hệ thống thư mục này được thiết kế theo 3 nguyên tắc chính:
+Hệ thống thư mục này được thiết kế theo 3 nguyên tắc:
 
 * Separation of Concerns: tách biệt rõ theo chức năng
 * Lifecycle-based: quản lý theo vòng đời (Inbox → Active → Archive → Backup)
-* Scalability: dễ mở rộng khi số lượng project và tài nguyên tăng
+* Scalability: dễ mở rộng và maintain lâu dài
 
 Mục tiêu:
 
 * Tìm file nhanh
-* Giảm lộn xộn
-* Chuẩn hóa môi trường làm việc (development + personal)
+* Tránh trùng lặp
+* Chuẩn hóa môi trường làm việc
 
-1. ROOT STRUCTURE
-
----
-
-00_INBOX           → Nơi tiếp nhận file  
-01_ACTIVE_PROJECTS → Dự án đang thực thi  
-02_DEVELOPMENT     → Tài nguyên dev dùng chung  
-03_RESOURCES       → Tài liệu & tri thức  
-04_PERSONAL        → Quản lý cá nhân  
-05_ARCHIVE         → Lưu trữ dài hạn  
-06_BACKUP_SYNC     → Backup & đồng bộ  
-07_UTILITIES       → Công cụ hệ thống  
-
-1. CHI TIẾT TỪNG FOLDER
+2. ROOT STRUCTURE
 
 ---
 
-3.1. 00_INBOX – Intake Layer
+00_INBOX           → Nơi tiếp nhận file
+01_ACTIVE_PROJECTS → Dự án đang thực thi
+02_DEVELOPMENT     → Công cụ & tài nguyên dev dùng chung
+03_RESOURCES       → Tài liệu & tri thức
+04_PERSONAL        → Dữ liệu cá nhân
+05_ARCHIVE         → Lưu trữ dài hạn
+06_BACKUP_SYNC     → Backup & đồng bộ
+07_UTILITIES       → Công cụ hệ thống
 
-* Mục đích: chứa file chưa phân loại
-* Không lưu lâu dài
+---
 
-Subfolders:
+3. CHI TIẾT QUAN TRỌNG (UPDATED)
 
-* Downloads
-* Screenshots
-* Quick_Notes
-* Temp_Files
+---
 
-Nguyên tắc:
+3.1. 01_ACTIVE_PROJECTS – Execution Layer
 
-* Dọn định kỳ (daily/weekly)
-* Luôn move file về đúng nơi sau khi xử lý
+Chứa:
 
-3.2. 01_ACTIVE_PROJECTS – Execution Layer
+* Tất cả project đang làm
 
-* Mục đích: chứa toàn bộ project đang hoạt động
-
-Cấu trúc:
-
-* Client_Work
-* Personal_Projects
-* Learning_Projects
-
-Bên trong mỗi project:
+Cấu trúc chuẩn:
 Project_Name/
 ├── Docs
-├── Code
+├── Code (Git repo chính)
 ├── Test
 └── Deployment
 
-Nguyên tắc:
+Rule:
 
 * Mỗi project phải self-contained
-* Không để file project rải rác ở nơi khác
+* Không tách code ra ngoài
 
-3.3. 02_DEVELOPMENT – Reusable Dev Assets
+---
 
-* Mục đích: chứa tài nguyên kỹ thuật dùng lại
+3.2. 02_DEVELOPMENT – Dev Platform Layer (QUAN TRỌNG)
 
-Subfolders:
+Đây là layer dễ bị hiểu sai nhất.
 
-* Code_Repositories
-* Tools_Scripts
-* Databases
-* API_Collections
+Mục đích:
+→ Chứa mọi thứ dùng để build project (nhưng KHÔNG phải project)
 
-Chứa:
+Cấu trúc chuẩn:
 
-* Script automation
-* Code templates
-* Snippets
-* SQL scripts chung
+02_DEVELOPMENT/
+├── Code_Repositories/
+│     ├── Internal_Repos
+│     ├── Forked_Repos
+│
+├── Tools_Scripts/
+│     ├── Automation_Scripts
+│     ├── Utility_Tools
+│     ├── Code_Snippets
+│     └── Templates
+│
+├── Databases/
+└── API_Collections/
 
-Nguyên tắc:
+---
 
-* Chỉ chứa reusable assets
-* Không chứa logic riêng của project
-
-3.4. 03_RESOURCES – Knowledge Base
-
-* Mục đích: lưu tài liệu tham khảo
-
-Subfolders:
-
-* Documentation
-* Learning_Materials
-* Design_Assets
-* Licenses_Legal
+3.2.1. Code_Repositories
 
 Chứa:
 
-* Sách, PDF
+* Repo bạn phát triển nhưng không thuộc 1 project cụ thể
+* Library nội bộ
+* Framework dùng chung
+
+Ví dụ:
+
+* auth-lib
+* logging-lib
+* shared-utils
+
+KHÔNG chứa:
+
+* Repo của project → phải nằm ở ACTIVE
+
+---
+
+3.2.2. Tools_Scripts
+
+Chia thành 4 nhóm rõ ràng:
+
+(1) Automation_Scripts
+
+* Script build, deploy, CI/CD
+
+(2) Utility_Tools  (QUAN TRỌNG - BỊ THIẾU TRONG README CŨ)
+
+* Tool external hoặc tool nhỏ dùng trực tiếp
+
+Ví dụ:
+
+* markitdown
+* pandoc
+* ffmpeg
+* jsonlint
+
+Đặc điểm:
+
+* Không phải bạn phát triển
+* Clone về để dùng
+* Có thể thay thế bất kỳ lúc nào
+
+(3) Code_Snippets
+
+* Đoạn code tái sử dụng nhanh
+
+(4) Templates
+
+* Boilerplate project
+* Template code
+
+---
+
+3.3. 03_RESOURCES – Knowledge Layer
+
+Chứa:
+
+* Sách
 * API docs
 * Architecture reference
 * UI/UX assets
 
-Nguyên tắc:
+Rule:
 
-* Chủ yếu read-only
+* Read-only càng nhiều càng tốt
 * Không chỉnh sửa trực tiếp
 
-3.5. 04_PERSONAL – Life Management
+---
 
-* Mục đích: quản lý dữ liệu cá nhân
-
-Subfolders:
-
-* Documents
-* Career_Development
-* Media_Entertainment
-* Hobbies_Interests
-
-Nguyên tắc:
-
-* Phân loại rõ theo domain cá nhân
-* File nhạy cảm cần bảo mật
-
-3.6. 05_ARCHIVE – Cold Storage
-
-* Mục đích: lưu dữ liệu không còn active
-
-Subfolders:
-
-* Completed_Projects
-* Old_Jobs_Companies
-* Deprecated_Code
-
-Nguyên tắc:
-
-* Không chỉnh sửa
-* Chỉ dùng để tra cứu
-
-3.7. 06_BACKUP_SYNC – Backup Layer
-
-* Mục đích: đảm bảo an toàn dữ liệu
-
-Subfolders:
-
-* Cloud_Sync
-* Local_Backups
-* System_Images
-
-Nguyên tắc:
-
-* Backup định kỳ
-* Không làm việc trực tiếp trên backup
-
-3.8. 07_UTILITIES – System Tools
-
-* Mục đích: công cụ hệ thống
-
-Subfolders:
-
-* Software_Installers
-* Configuration_Files
-* Maintenance
+3.4. 07_UTILITIES – System Layer
 
 Chứa:
 
-* Installer
-* Config IDE / environment
-* Script setup / cleanup
+* Script setup máy
+* Script quản lý workspace
+* Config hệ thống
 
-Nguyên tắc:
-
-* Không chứa dữ liệu nghiệp vụ
-* Dùng cho setup hệ thống
-
-1. WORKFLOW CHUẨN
-
----
-
-Bước 1 – Intake:
-File mới → 00_INBOX
-
-Bước 2 – Processing:
-
-* Project → 01_ACTIVE_PROJECTS
-* Tài liệu → 03_RESOURCES
-* Cá nhân → 04_PERSONAL
-
-Bước 3 – Archiving:
-Project hoàn thành → 05_ARCHIVE
-
-Bước 4 – Backup:
-Dữ liệu → 06_BACKUP_SYNC
-
-1. PHÂN BIỆT 3 FOLDER QUAN TRỌNG
-
----
-
-01_ACTIVE_PROJECTS:
-
-* Chứa cái bạn đang làm
-* Có deadline
-* Gắn với 1 project cụ thể
-
-02_DEVELOPMENT:
-
-* Công cụ để bạn làm việc
-* Dùng lại nhiều lần
-* Không thuộc riêng project nào
-
-03_RESOURCES:
-
-* Tri thức để tham khảo
-* Chủ yếu đọc
-* Không trực tiếp tạo ra output
-
-Rule nhanh:
-
-* Project-specific → ACTIVE
-* Reusable → DEVELOPMENT
-* Reference → RESOURCES
-
-1. QUY TẮC GIT REPOSITORY
-
----
-
-Repo thuộc project:
-→ 01_ACTIVE_PROJECTS/Project/Code
-
-Repo dùng chung:
-→ 02_DEVELOPMENT/Code_Repositories
-
-Repo hệ thống (script init, setup):
-→ 07_UTILITIES/Maintenance
+Ví dụ:
+07_UTILITIES/
+└── Maintenance/
+└── workspace-bootstrap (git repo)
 
 Rule:
 
-* 1 project → 1 repo nằm trong project
-* Tool dùng chung → DEV
-* System tool → UTILITIES
-
-1. NAMING CONVENTION
+* Đây là layer SYSTEM
+* Không chứa dev tool
 
 ---
 
-Folder:
-
-* snake_case hoặc PascalCase
-
-Project:
-YYYY_ProjectName_Company
-
-File:
-YYYY-MM-DD_description.ext
-
-1. RULES QUAN TRỌNG
+4. PHÂN BIỆT 4 LOẠI GIT REPO (QUAN TRỌNG)
 
 ---
 
-1. Không để file lâu trong INBOX
+Loại 1 — Project Repo
+→ 01_ACTIVE_PROJECTS/Project/Code
 
-2. Mỗi project phải self-contained
+Loại 2 — Internal Shared Repo
+→ 02_DEVELOPMENT/Code_Repositories
 
-3. Không duplicate tài nguyên
+Loại 3 — External Tool Repo
+→ 02_DEVELOPMENT/Tools_Scripts/Utility_Tools
 
-4. Depth tối đa: 3–4 level
-
-5. Backup định kỳ
-
-6. Phân biệt rõ 3 layer: Active – Dev – Resource
-
-7. CHECKLIST HÀNG TUẦN
+Loại 4 — System Tool Repo
+→ 07_UTILITIES/Maintenance
 
 ---
 
-* INBOX đã dọn chưa?
-* File có nằm đúng folder không?
-* Có file trùng không?
-* Backup đã chạy chưa?
-
-1. KẾT LUẬN
+5. RULE PHÂN LOẠI NHANH
 
 ---
 
-Hệ thống này tối ưu cho:
+Hỏi 1 câu duy nhất:
 
-* Developer
-* Knowledge worker
-* Quản lý project + tài liệu + cá nhân
+"Repo này phục vụ cái gì?"
 
-Nếu sử dụng đúng:
+* 1 project cụ thể → ACTIVE
+* Nhiều project → DEVELOPMENT
+* Tool bên ngoài → Utility_Tools
+* Setup hệ thống → UTILITIES
 
-* Giảm thời gian tìm file
-* Giảm cognitive load
-* Tăng hiệu suất làm việc
+---
+
+6. SAI LẦM PHỔ BIẾN (ĐÃ GẶP)
+
+---
+
+❌ Nhét tất cả repo vào 02_DEVELOPMENT
+→ mất context project
+
+❌ Copy tool vào từng project
+→ duplicate
+
+❌ Không phân biệt Utility_Tools vs Code_Repositories
+→ hỗn loạn layer
+
+❌ Để external tool trong 07_UTILITIES
+→ sai semantic
+
+---
+
+7. KẾT LUẬN
+
+---
+
+README version cũ thiếu layer:
+
+→ Utility_Tools
+→ phân biệt rõ repo types
+
+Sau khi chuẩn hóa:
+
+* ACTIVE = nơi tạo giá trị
+* DEVELOPMENT = platform + tools
+* RESOURCES = tri thức
+* UTILITIES = hệ thống
+
+Đây là cấu trúc gần với:
+→ Software architecture (Application / Platform / Infrastructure)
+
+Nếu giữ đúng boundary:
+
+* Không bị trùng
+* Không bị lẫn layer
+* Scale lâu dài mà không vỡ cấu trúc
